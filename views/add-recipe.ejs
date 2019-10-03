@@ -1,0 +1,61 @@
+<% include partials/head %>
+<% include partials/header %>
+
+<h1><%= title %></h1>
+<%= content %>
+
+<form action="" method="post" enctype="multipart/form-data">
+    <label for="beskrivelse">beskrivelse</label><textarea name="description" id="beskrivelse" placeholder="beskrivelse" cols="30" rows="10"></textarea>
+    <label for="process">Procedure</label><textarea id="process" name="procedure" cols="30" rows="10"></textarea>
+        <fieldset class="ingredients-list">
+            <legend>Ingredienser</legend>
+            <a href="#" class="ingredients">Ny ingrediens</a>
+        </fieldset>
+    <label for="published">Udgiv</label>
+    <select name="publish" id="published">
+        <option value="0">Kladde</option>
+        <option value="1">Udgiv</option>
+    </select>
+        <label>
+            Billeder:
+            <input type="file" multiple name="images">
+        </label>
+
+
+    <button type="submit">Gem opskrift</button>
+</form>
+<script>
+    document.querySelector('.ingredients').addEventListener('click', function(){
+        var time = event.timeStamp;
+        event.preventDefault();
+        let ingredients = document.querySelector('.ingredients-list');
+
+        let name = 'ingr'+time;
+
+        let nameLabel = document.createElement('label');
+        nameLabel.textContent = 'Navn';
+        let nameInput = document.createElement('input');
+        nameInput.setAttribute('name', name);
+
+        let amountLabel = document.createElement('label');
+        amountLabel.textContent = 'Mængde';
+        let amountInput = document.createElement('input');
+        amountInput.setAttribute('name', name);
+
+        let measureLabel = document.createElement('label');
+        measureLabel.textContent = 'Måleenhed';
+        let measureInput = document.createElement('input');
+        measureInput.setAttribute('name', name);
+
+        nameLabel.appendChild(nameInput);
+        amountLabel.appendChild(amountInput);
+        measureLabel.appendChild(measureInput);
+
+        ingredients.appendChild(nameLabel);
+        ingredients.appendChild(amountLabel);
+        ingredients.appendChild(measureLabel);
+    });
+
+</script>
+<% include partials/footer %>
+<% include partials/after-footer %>

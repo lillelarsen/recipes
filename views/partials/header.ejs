@@ -1,0 +1,23 @@
+<header>
+	<a href="/" class="siteBrand">Recipes . NET</a>
+	<% if (bruger) {
+		%>
+		<a href="/auth/logout">Log ud</a>
+		<% 
+	} else {
+		%>
+		<a href="/login">Log ind</a>
+		<%
+	} %>
+	<nav role="navigation">
+		<ul class="primaryNavigation">
+			<li role="menuitem"><a href="/recipes" class="primaryNavigation__link">Opskrifter</a></li>
+			<% if (!bruger) {
+				%>
+					<li role="menuitem"><a href="/create-user" class="primaryNavigation__link">Opret bruger</a></li>
+				<% 
+			} %>
+		</ul>
+	</nav>
+</header>
+<main role="main">

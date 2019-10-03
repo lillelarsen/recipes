@@ -1,0 +1,40 @@
+{
+  "name": "recipes.net",
+  "version": "0.0.0",
+  "description": "web application",
+  "main": "server.js",
+  "scripts": {
+    "start": "node -r dotenv/config server.js dotenv_config_path=./.env",
+    "dev": "run-script-os",
+    "dev:win32": "set DEBUG=app & nodemon -r dotenv/config server.js dotenv_config_path=./.env",
+    "dev:linux": "DEBUG=app nodemon -r dotenv/config server.js dotenv_config_path=./.env",
+    "dev:darwin": "DEBUG=app nodemon -r dotenv/config server.js dotenv_config_path=./.env",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rts-cmk/recipes-dot-net.git"
+  },
+  "author": "Brian Emilius <be@rts.dk>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rts-cmk/recipes-dot-net/issues"
+  },
+  "homepage": "https://github.com/rts-cmk/recipes-dot-net#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^6.2.0",
+    "ejs": "^2.6.1",
+    "express": "^4.16.4",
+    "express-formidable": "^1.2.0",
+    "express-log-errors": "^2.0.2",
+    "express-session": "^1.15.6",
+    "morgan": "^1.9.1",
+    "mysql2": "^1.6.4"
+  },
+  "devDependencies": {
+    "debug": "^4.1.1",
+    "nodemon": "^1.18.9",
+    "run-script-os": "^1.0.5"
+  }
+}

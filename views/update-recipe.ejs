@@ -1,0 +1,72 @@
+<% include partials/head %>
+<% include partials/header %>
+<main>
+     <!--Redigering af opskrift -->
+    <div id="updateTo" class="updateForm">
+        <a href="" onclick="closeUpdateForm()"><i class="fas fa-times"></i></a>
+        <h2>Redigér opskrift</h2>
+        <form class="formUpdateForm">
+            <input type="hidden" name="id" class="updateID" value="<%= recipe.id %>">
+            <label for="name">Opskrift</label><input type="text" name="opskriftUpdate" value="<%= recipe.description %>">
+            <label for="name">Procedure</label><input type="text" name="procedureUpdate" value="<%= recipe.procedure %>">
+            <label for="name">Udgivet</label><input type="text" name="udgivetUpdate" value="<%= recipe.published %>">
+
+            <% ingredients.forEach(ingredient => { %>
+            <fieldset>
+                <input type="hidden" name="ingredientId" class="updateID" value="<%= ingredient.id %>">
+                <label for="name">navn</label><input type="text" name="ingredientName" value="<%= ingredient.name %>">
+                <label for="name">mængde</label><input type="text" name="ingredientAmount" value="<%= ingredient.amount %>">
+                <label for="name">målenhed</label><input type="text" name="ingredientMeasure" value="<%= ingredient.measure %>">
+                <input type="hidden" name="ingredientRecipesId" class="updateID" value="<%= ingredient.recipes_id %>">
+            </fieldset>
+            <% }); %>
+
+            <button type="submit">Gem Opskrift</button>
+        </form>
+    </div>
+</main>
+
+<!--Sender vores data afsted i PATCHmetoden for at updatere i routet -->
+<script>
+        document.querySelector('.formUpdateForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const data = {
+                'id' : this.id.value,
+                'opskrift' : this.opskriftUpdate.value,
+                'procedure' : this.procedureUpdate.value,
+                'udgivet' : this.udgivetUpdate.value
+            }
+            const ingredients= []; 
+            
+            let dataIng = {
+                'id' : this.ingredientId.value,
+                'name' : this.ingredientName.value,
+                'amount' : this.ingredientAmount.value,
+                'measure' : this.ingredientMeasure.value,
+                'recipes_id' : this.ingredientRecipesId.value
+            }
+            for (x in dataIng) {
+                ingredients.push(dataIng[x]);
+            }
+
+            console.log(dataIng)
+               
+            fetch(`/update-recipe/${data.id}/${ingredients}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-type': 'application/json; charset=utf-8'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => {
+                if (response.status === 200) {
+                    window.location.reload(true);
+                } else {
+                  
+                }
+            })
+        });
+    </script>
+
+<% include partials/footer %>
+<% include partials/after-footer %>

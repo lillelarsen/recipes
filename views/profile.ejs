@@ -1,0 +1,128 @@
+<% include partials/head %>
+<% include partials/header %>
+
+<h1><%= title %></h1>
+<form class="profileForm">
+	<div class="inputGroup">
+		<label>
+			Brugernavn
+			<input type="text" name="username" value="<%= user.username %>" disabled>
+		</label>
+	</div>
+	<div class="inputGroup">
+		<label>
+			Profilbillede
+			<input type="file" class="profileFileSelect">
+		</label>
+		<img src="/uploads/<%= user.photo %>" alt="Standard profilbillede" class="profileImage">
+	</div>
+	<div class="inputGroup">
+		<label>
+			Fornavn
+			<input type="text" name="firstname" value="<%= user.firstname %>">
+		</label>
+	</div>
+	<div class="inputGroup">
+		<label>
+			Efternavn
+			<input type="text" name="lastname" value="<%= user.lastname %>">
+		</label>
+	</div>
+	<div class="inputGroup">
+		<label>
+			Beskrivelse
+			<textarea name="bio"><%= user.bio %></textarea>
+		</label>
+	</div>
+	<button type="submit">Gem</button>
+</form>
+
+<section>
+	<h2><%= title %></h2> 
+	<a href="/add-recipe">Ny opskrift</a>
+	<table class="profil_table">
+		<tr>
+		  <th>Slet</th>
+		  <th>Rediger</th>
+		  <th>Opskrift nr</th>
+		  <th>Opskrift</th>
+		  <th>Procedure</th>
+		  <th>Udgivet</th>
+		</tr>
+		<% recipes.forEach(recipe => { %>
+		<tr>
+		  <td><a href="#" data-recipe="<%= recipe.id %>" class="fas fa-minus-circle deleteButtons">slet</a></td>
+		  <td><a href="/update-recipe/<%= recipe.id %>"><i class="fas fa-minus-circle">Rediger</a></td>
+		  <td><%= recipe.id %></td>
+		  <td><%= recipe.description %> </td>
+		  <td><%= recipe.procedure %></td>
+		  <td><%= recipe.published %></td>
+		</tr>
+		<% }); %>
+	  </table>  
+	  <a class="button" href="/">Log ud</a> 
+</section>
+
+<script>
+const form = document.querySelector('.profileForm');
+form.addEventListener('submit', function (event) {
+	event.preventDefault();
+	fetch('/profile', {
+		method: 'PATCH',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({
+			firstname: this.firstname.value,
+			lastname: this.lastname.value,
+			bio: this.bio.value
+		})
+	})
+		.then(response => {
+			if (response.status === 204) {
+				return response.json();
+			}
+		}).then(data => {
+			/* ??? */
+		})
+});
+
+const file = document.querySelector('.profileFileSelect');
+file.addEventListener('change', function (event) {
+	const formData = new FormData();
+	formData.append('photo', this.files[0]);
+	fetch('/profile/image', {
+		method: 'PATCH',
+		body: formData
+	})
+		.then(response => {
+			if (response.status === 200) return response.json();
+		})
+		.then(data => {
+			const img = document.querySelector('.profileImage');
+			img.src = `/uploads/${data.photo}`;
+		});
+});
+
+//Når vi trykker på deletebutton, sender vi et delete request over til vores route, med opskrift idét
+       const deleteButtons = document.querySelectorAll('.deleteButtons');
+    deleteButtons.forEach(btn => {
+    btn.addEventListener('click', event => {
+        const classId = event.target.dataset.recipe;
+        fetch(`/profile/${classId}`, {
+            'method': 'DELETE',
+            headers: {
+                    'Content-type': 'application/json; charset=utf-8'
+                }
+        })
+        .then(response => {
+            if (response.status === 200) {
+                window.location.reload();
+            }
+        });
+    })
+})
+</script>
+
+<% include partials/footer %>
+<% include partials/after-footer %>

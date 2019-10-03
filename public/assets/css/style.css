@@ -1,0 +1,6 @@
+/*-----------profileMain-----------*/
+th, td, tr {
+    border: solid 1px black;
+    padding: 5px;
+    max-width: 320px;;
+}
